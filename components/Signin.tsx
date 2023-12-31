@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation"; // Ensure correct import for your Next.js version
+import { signIn } from "next-auth/react";
 
 // Define the validation schema using Zod
 const FormSchema = z.object({
@@ -27,10 +28,17 @@ const SignIn = () => {
   });
 
   // Handle form submission
-  const onSubmit = async (values: any) => {
-    console.log(values);
-    // Implement sign-in logic here...
-    // Example: Fetch call to your sign-in API
+  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    const signInData = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    });
+    if (signInData?.error) {
+      console.log(signInData.error);
+    } else {
+      router.push("/dashboard");
+    }
   };
 
   return (

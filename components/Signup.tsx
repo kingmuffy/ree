@@ -37,11 +37,32 @@ const Signup = () => {
   });
 
   // Handle form submission
-  const onSubmit = async (values: any) => {
-    // API call logic...
-    // Example fetch call
-    // const response = await fetch("/api/user", { ... });
-    // Handle response...
+  const onSubmit = async (values: {
+    username: any;
+    email: any;
+    password: any;
+  }) => {
+    // Implement your API call logic here
+    // Example:
+    const response = await fetch("/api/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: values.username,
+        email: values.email,
+        password: values.password,
+      }),
+    });
+
+    if (response.ok) {
+      // Redirect on successful registration
+      router.push("/sign-in");
+    } else {
+      // Handle registration failure
+      console.log("Registration failed");
+    }
   };
 
   // Render the form
